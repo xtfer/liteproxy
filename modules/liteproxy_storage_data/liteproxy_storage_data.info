@@ -1,0 +1,9 @@
+; $Id:$
+name = Liteproxy data storage
+description = Data storage module for liteproxy.
+core = 6.x
+version = "6.x-1.x-dev"
+dependencies[] = liteproxy
+dependencies[] = data
+
+files[] = liteproxy_storage_data.inc

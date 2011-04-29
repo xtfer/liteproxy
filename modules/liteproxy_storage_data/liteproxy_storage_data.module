@@ -1,0 +1,22 @@
+<?php
+/**
+ * Implementation of hook_liteproxy_storage()
+ */
+
+function liteproxy_liteproxy_storage(){
+  return array(
+    'data' => array(
+      'function' => 'liteproxy_storage_data',
+      'file' => 'plugins/storage/data.inc',
+      'schema' => array(
+        'fields' => array(
+          'nid' => array('type' => 'varchar', 'length' => '12'),
+          'content'  => array('type' => 'text'),
+          ),
+        'primary key' => array(
+          'nid',
+          ),
+        ),
+    ),
+  );
+}

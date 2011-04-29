@@ -1,0 +1,13 @@
+<?php
+/**
+ * Liteproxy example module
+ */
+
+function example_liteproxy_liteproxy_proxy(){
+  
+  $proxy = array(
+    'exampleLiteproxy',
+    );
+    
+  return $proxy;
+}

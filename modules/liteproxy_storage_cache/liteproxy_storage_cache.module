@@ -1,0 +1,12 @@
+<?php
+/**
+ * Implemenation of hook_liteproxy_storage()
+ */
+
+function liteproxy_storage_cache_liteproxy_storage(){
+  return array(
+    'cache' => array(
+      'handler' => 'liteproxyCacheStorage',
+    ),
+  );
+}

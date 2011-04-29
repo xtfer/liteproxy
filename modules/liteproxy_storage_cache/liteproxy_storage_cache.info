@@ -1,0 +1,8 @@
+; $Id:$
+name = Liteproxy cache storage
+description = Drupal cache storage module for liteproxy.
+core = 6.x
+version = "6.x-1.x-dev"
+dependencies[] = liteproxy
+
+files[] = liteproxy_storage_cache.inc

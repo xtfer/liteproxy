@@ -1,0 +1,117 @@
+<?php
+// $Id: $
+
+/**
+ * Liteproxy is a simple way of retrieving content from other locations
+ * and displaying it in a node context in Drupal. Liteproxy does not create
+ * native drupal objects, but maps cached representations of remote objects to
+ * a node location. As such, content retrieved with liteproxy is not editable.
+ *
+ * Liteproxy is a developer only module. Developers should create a new module,
+ * declare a liteproxy configuration using hook_lightproxy(), and define the 
+ * appropriate function callbacks for each parameter. Liteproxy takes care of
+ * retrieval, caching and output.
+ */
+
+ 
+/**
+ * Implementation of hook_nodeapi()
+ */
+function liteproxy_nodeapi(&$node, $op){
+  switch('op'){
+    case 'view':  
+    case 'update':
+      liteproxy_view(&$node);
+      break;
+    case 'delete':
+      liteproxy_delete($node->nid);
+      break;
+  }
+}
+
+/**
+ * Prepare a liteproxy entry for viewing
+ */
+function liteproxy_view(&$node){
+  $lp = new Liteproxy(&$node);
+  $lp->view();
+}
+
+/**
+ * Delete a cache entry
+ */
+function liteproxy_delete($nid){
+  $lp = new Liteproxy($node);
+  $lp->delete($node);
+}
+
+/**
+ * Match a proxy
+ * @param $node a node object
+ * @return a proxy configuration array, or FALSE
+ */
+function liteproxy_match_proxy($node){
+  $proxies = liteproxy_get_proxies();
+  
+  foreach($proxies as $proxy){
+    if($proxy['content_type'] == $node->type) {
+      // If a match is found, ensure that all the values are set to something, or use defaults
+      foreach($proxies['default'] as $key => $value){
+        if(!isset($proxy[$key])){
+          $proxy[$key] = $proxies['default'][$key];
+        }
+      }
+      $proxy['name'] = key($proxies);
+      return $proxy;
+    }
+  }
+  
+  return FALSE;
+}
+
+/**
+ * Return a list of proxies.
+ * Statically cached.
+ * @return an array of proxies, or FALSE if no proxies are found.
+ */
+function liteproxy_get_proxies(){
+  static $proxies = array();
+  
+  if(!isarray($proxies) || empty($proxies)){
+    $proxies = module_invoke_all('liteproxy_proxy');
+  }
+  
+  if(!isarray($proxies) || empty($proxies)){
+    return FALSE;
+  }
+  
+  return $proxies;
+}
+
+/**
+ * Instantiate storage
+ *
+ * @return
+ *  an array of available storage mechanisms
+ */
+function liteproxy_storage_list(){
+  static $storage;
+  
+  if(!is_array($storage)){
+    $storage = module_invoke_all('liteproxy_storage');
+  }
+  
+  return $storage;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function liteproxy_theme($existing, $type, $theme, $path) {
+  return array(
+    'liteproxy' => array(
+      'arguments' => array($vars),
+      'template' => 'theme/liteproxy'
+      ),
+  );
+}
