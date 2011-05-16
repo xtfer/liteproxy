@@ -1,9 +1,5 @@
-; $Id:$
 name = Liteproxy
 description = A lightweight way of displaying content from other locations.
 core = 6.x
-version = "6.x-1.x-dev"
 dependencies[] = autoload
-
 files[] = liteproxy.inc
-

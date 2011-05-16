@@ -1,6 +1,4 @@
 <?php
-// $Id: $
-
 /**
  * Liteproxy is a simple way of retrieving content from other locations
  * and displaying it in a node context in Drupal. Liteproxy does not create
@@ -8,18 +6,18 @@
  * a node location. As such, content retrieved with liteproxy is not editable.
  *
  * Liteproxy is a developer only module. Developers should create a new module,
- * declare a liteproxy configuration using hook_lightproxy(), and define the 
+ * declare a liteproxy configuration using hook_lightproxy(), and define the
  * appropriate function callbacks for each parameter. Liteproxy takes care of
  * retrieval, caching and output.
  */
 
- 
+
 /**
  * Implementation of hook_nodeapi()
  */
-function liteproxy_nodeapi(&$node, $op){
+function liteproxy_nodeapi(&$node, $op) {
   switch('op'){
-    case 'view':  
+    case 'view':
     case 'update':
       liteproxy_view(&$node);
       break;
@@ -52,7 +50,7 @@ function liteproxy_delete($nid){
  */
 function liteproxy_match_proxy($node){
   $proxies = liteproxy_get_proxies();
-  
+
   foreach($proxies as $proxy){
     if($proxy['content_type'] == $node->type) {
       // If a match is found, ensure that all the values are set to something, or use defaults
@@ -65,7 +63,7 @@ function liteproxy_match_proxy($node){
       return $proxy;
     }
   }
-  
+
   return FALSE;
 }
 
@@ -76,15 +74,15 @@ function liteproxy_match_proxy($node){
  */
 function liteproxy_get_proxies(){
   static $proxies = array();
-  
+
   if(!isarray($proxies) || empty($proxies)){
     $proxies = module_invoke_all('liteproxy_proxy');
   }
-  
+
   if(!isarray($proxies) || empty($proxies)){
     return FALSE;
   }
-  
+
   return $proxies;
 }
 
@@ -96,11 +94,11 @@ function liteproxy_get_proxies(){
  */
 function liteproxy_storage_list(){
   static $storage;
-  
+
   if(!is_array($storage)){
     $storage = module_invoke_all('liteproxy_storage');
   }
-  
+
   return $storage;
 }
 
